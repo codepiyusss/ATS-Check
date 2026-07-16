@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}About - Check Your Resume{% endblock %}
+
+{% block content %}
+<section class="static-page">
+  <div class="container narrow">
+
+    <h1 class="page-heading">About This Project</h1>
+
+    <div class="box">
+      <h2 class="box-heading">Purpose</h2>
+      <p>
+        Check Your Resume was built to help job seekers get a quick,
+        practical idea of how well their resume might perform against
+        an Applicant Tracking System (ATS) before they submit it to a
+        real job application.
+      </p>
+    </div>
+
+    <div class="box">
+      <h2 class="box-heading">Who It's For</h2>
+      <p>
+        Students, recent graduates, and anyone actively job hunting who
+        wants fast feedback on formatting, keywords, and overall resume
+        quality without needing to hire a professional resume reviewer.
+      </p>
+    </div>
+
+    <div class="box">
+      <h2 class="box-heading">How ATS Works</h2>
+      <p>
+        Most companies use software called an Applicant Tracking System
+        to automatically scan and filter incoming resumes before a human
+        ever sees them. These systems look for relevant keywords, clear
+        formatting, and readable structure. A resume that isn't
+        ATS-friendly can be filtered out even if the candidate is
+        qualified.
+      </p>
+      <p>
+        This project estimates ATS compatibility using resume parsing,
+        keyword analysis, formatting evaluation, and AI-generated
+        feedback.
+      </p>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

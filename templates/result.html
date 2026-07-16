@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}Resume Analysis Report{% endblock %}
+
+{% block content %}
+<section class="result-section">
+  <div class="container">
+
+    <h1 class="page-heading">Resume Analysis Report</h1>
+
+    <!-- ATS Score -->
+    <div class="ats-score-box box">
+      <p class="ats-score-number">{{ data.ats_score }}%</p>
+      {% set label = "Good" if data.ats_score >= 75 else ("Average" if data.ats_score >= 50 else "Needs Improvement") %}
+      {% set label_class = "good" if data.ats_score >= 75 else ("average" if data.ats_score >= 50 else "needs-improvement") %}
+      <p class="ats-score-label label-{{ label_class }}">{{ label }}</p>
+      <p class="ats-score-caption">Estimated ATS Compatibility Score</p>
+    </div>
+
+    <!-- Score bars -->
+    <div class="scores-grid">
+
+      <div class="score-box box">
+        <div class="score-header">
+          <span>Formatting Score</span>
+          <span>{{ data.formatting_score }}%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: {{ data.formatting_score }}%;"></div>
+        </div>
+      </div>
+
+      <div class="score-box box">
+        <div class="score-header">
+          <span>Grammar Score</span>
+          <span>{{ data.grammar_score }}%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: {{ data.grammar_score }}%;"></div>
+        </div>
+      </div>
+
+      <div class="score-box box">
+        <div class="score-header">
+          <span>Readability Score</span>
+          <span>{{ data.readability_score }}%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: {{ data.readability_score }}%;"></div>
+        </div>
+      </div>
+
+      <div class="score-box box">
+        <div class="score-header">
+          <span>Keyword Match</span>
+          <span>{{ data.keyword_match_percent }}%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: {{ data.keyword_match_percent }}%;"></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Keyword match columns -->
+    <div class="box keyword-box">
+      <h2 class="box-heading">Keyword Match</h2>
+      <div class="keyword-columns">
+        <div class="keyword-col">
+          <h3>Matched Keywords</h3>
+          <ul class="keyword-list matched">
+            {% for kw in data.matched_keywords %}
+              <li>{{ kw }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div class="keyword-col">
+          <h3>Missing Keywords</h3>
+          <ul class="keyword-list missing">
+            {% for kw in data.missing_keywords %}
+              <li>{{ kw }}</li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Strong / Weak sections -->
+    <div class="sections-grid">
+      <div class="box">
+        <h2 class="box-heading">Strong Sections</h2>
+        <ul class="plain-list">
+          {% for s in data.strong_sections %}
+            <li>{{ s }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="box">
+        <h2 class="box-heading">Weak Sections</h2>
+        <ul class="plain-list">
+          {% for s in data.weak_sections %}
+            <li>{{ s }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="box suggestions-box">
+      <h2 class="box-heading">Suggestions</h2>
+      <ul class="suggestions-list">
+        {% for suggestion in data.suggestions %}
+          <li><span class="check-icon">✔</span> {{ suggestion }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+
+    <!-- Overall feedback -->
+    <div class="box feedback-box">
+      <h2 class="box-heading">Overall Feedback</h2>
+      <p>{{ data.overall_feedback }}</p>
+    </div>
+
+    <div class="result-actions">
+      <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Analyze Another Resume</a>
+    </div>
+
+  </div>
+</section>
+{% endblock %}

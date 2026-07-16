@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Check Your Resume{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="navbar-inner">
+      <a href="{{ url_for('main.index') }}" class="navbar-brand">CHECK YOUR RESUME</a>
+
+      <button class="navbar-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+
+      <nav class="navbar-links" id="navLinks">
+        <a href="{{ url_for('main.index') }}">Home</a>
+        <a href="{{ url_for('main.about') }}">About</a>
+        <a href="{{ url_for('main.contact') }}">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <p class="footer-title">CHECK YOUR RESUME</p>
+      <p class="footer-sub">Made as a student learning project.</p>
+      <div class="footer-links">
+        <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+      <p class="footer-copy">&copy; {{ 2026 }} Check Your Resume. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

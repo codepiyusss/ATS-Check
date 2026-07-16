@@ -1,0 +1,626 @@
+/* =========================================================
+   CHECK YOUR RESUME - main stylesheet
+   Keeping this simple and readable on purpose - no CSS
+   framework, just plain flat styles.
+   ========================================================= */
+
+:root {
+  --bg: #F6F2EF;
+  --navy: #202940;
+  --brown: #4B4038;
+  --light-brown: #9A8678;
+  --border: #CAAA98;
+  --white: #FFFFFF;
+  --text: #2D2D2D;
+
+  --good: #3a7d44;
+  --average: #b8860b;
+  --bad: #a5322d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Roboto', Arial, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.container.narrow {
+  max-width: 700px;
+}
+
+a {
+  color: var(--navy);
+}
+
+h1, h2, h3 {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+/* ---------------- Navbar ---------------- */
+
+.navbar {
+  background-color: var(--white);
+  border-bottom: 2px solid var(--border);
+}
+
+.navbar-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-brand {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--navy);
+  text-decoration: none;
+  letter-spacing: 0.5px;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 24px;
+}
+
+.navbar-links a {
+  text-decoration: none;
+  color: var(--brown);
+  font-weight: 500;
+}
+
+.navbar-links a:hover {
+  color: var(--navy);
+}
+
+.navbar-toggle {
+  display: none;
+  background: none;
+  border: 1px solid var(--border);
+  font-size: 20px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+
+/* ---------------- Flash messages ---------------- */
+
+.flash-container {
+  max-width: 1000px;
+  margin: 16px auto 0;
+  padding: 0 20px;
+}
+
+.flash {
+  padding: 12px 16px;
+  border: 1px solid var(--border);
+  margin-bottom: 10px;
+  background-color: var(--white);
+}
+
+.flash-error {
+  border-color: var(--bad);
+  color: var(--bad);
+}
+
+.flash-success {
+  border-color: var(--good);
+  color: var(--good);
+}
+
+/* ---------------- Hero ---------------- */
+
+.hero {
+  text-align: center;
+  padding: 60px 20px 30px;
+}
+
+.hero-title {
+  font-size: 36px;
+  margin-bottom: 14px;
+}
+
+.hero-desc {
+  max-width: 620px;
+  margin: 0 auto;
+  color: var(--brown);
+  font-size: 16px;
+}
+
+/* ---------------- Upload section ---------------- */
+
+.upload-section {
+  padding: 20px 20px 60px;
+}
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.tab-btn {
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  padding: 10px 20px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--brown);
+}
+
+.tab-btn.active {
+  background-color: var(--navy);
+  color: var(--white);
+  border-color: var(--navy);
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.upload-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px dashed var(--border);
+  background-color: var(--white);
+  padding: 40px 20px;
+  max-width: 520px;
+  margin: 0 auto;
+  cursor: pointer;
+  text-align: center;
+}
+
+.upload-box.drag-over {
+  background-color: var(--bg);
+  border-color: var(--navy);
+}
+
+.upload-icon {
+  margin-bottom: 10px;
+}
+
+.upload-text {
+  font-weight: 600;
+  margin: 4px 0;
+  color: var(--navy);
+}
+
+.upload-subtext {
+  font-size: 13px;
+  color: var(--light-brown);
+  margin: 0;
+}
+
+.upload-filename {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--navy);
+  font-weight: 600;
+}
+
+.paste-textarea {
+  width: 100%;
+  max-width: 620px;
+  display: block;
+  margin: 0 auto;
+  padding: 14px;
+  border: 1px solid var(--border);
+  font-family: inherit;
+  font-size: 14px;
+  background-color: var(--white);
+  color: var(--text);
+  resize: vertical;
+}
+
+.analyze-btn-wrapper {
+  text-align: center;
+  margin-top: 26px;
+}
+
+/* ---------------- Buttons ---------------- */
+
+.btn {
+  display: inline-block;
+  padding: 12px 24px;
+  border: 1px solid transparent;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+}
+
+.btn-primary {
+  background-color: var(--navy);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: #161d30;
+}
+
+.btn-secondary {
+  background-color: var(--white);
+  color: var(--navy);
+  border: 1px solid var(--border);
+}
+
+.btn-large {
+  padding: 14px 36px;
+  font-size: 16px;
+}
+
+/* ---------------- Features ---------------- */
+
+.features-section {
+  padding: 40px 20px 60px;
+}
+
+.section-heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.feature-card {
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  padding: 24px;
+  text-align: left;
+  transition: box-shadow 0.15s ease;
+}
+
+.feature-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.feature-card h3 {
+  margin: 12px 0 8px;
+  font-size: 17px;
+}
+
+.feature-card p {
+  margin: 0;
+  color: var(--brown);
+  font-size: 14px;
+}
+
+/* ---------------- Privacy notice ---------------- */
+
+.privacy-section {
+  padding: 0 20px 60px;
+}
+
+.privacy-box {
+  border: 1px solid var(--border);
+  background-color: var(--white);
+  padding: 20px;
+  max-width: 620px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.privacy-box p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: var(--brown);
+}
+
+/* ---------------- Result page ---------------- */
+
+.result-section {
+  padding: 40px 20px 80px;
+}
+
+.page-heading {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.box {
+  background-color: var(--white);
+  border: 1px solid var(--border);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.box-heading {
+  margin-top: 0;
+  font-size: 18px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+}
+
+.ats-score-box {
+  text-align: center;
+}
+
+.ats-score-number {
+  font-size: 56px;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0;
+}
+
+.ats-score-label {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 4px 0;
+}
+
+.label-good { color: var(--good); }
+.label-average { color: var(--average); }
+.label-needs-improvement { color: var(--bad); }
+
+.ats-score-caption {
+  color: var(--light-brown);
+  font-size: 14px;
+  margin: 0;
+}
+
+.scores-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.score-box {
+  margin-bottom: 0;
+}
+
+.score-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--navy);
+}
+
+.progress-track {
+  background-color: var(--bg);
+  border: 1px solid var(--border);
+  height: 14px;
+  width: 100%;
+}
+
+.progress-fill {
+  background-color: var(--navy);
+  height: 100%;
+}
+
+.keyword-box {
+  margin-top: 20px;
+}
+
+.keyword-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.keyword-col h3 {
+  font-size: 15px;
+  margin-bottom: 10px;
+}
+
+.keyword-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.keyword-list li {
+  padding: 6px 10px;
+  margin-bottom: 6px;
+  font-size: 14px;
+  border-left: 3px solid var(--border);
+  background-color: var(--bg);
+}
+
+.keyword-list.matched li {
+  border-left-color: var(--good);
+}
+
+.keyword-list.missing li {
+  border-left-color: var(--bad);
+}
+
+.sections-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.plain-list {
+  margin: 0;
+  padding-left: 20px;
+  font-size: 14px;
+  color: var(--brown);
+}
+
+.suggestions-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.suggestions-list li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--bg);
+  font-size: 14px;
+}
+
+.suggestions-list li:last-child {
+  border-bottom: none;
+}
+
+.check-icon {
+  color: var(--good);
+  font-weight: 700;
+  margin-right: 6px;
+}
+
+.feedback-box p {
+  margin: 0;
+  color: var(--brown);
+}
+
+.result-actions {
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* ---------------- Static pages (About/Contact) ---------------- */
+
+.static-page {
+  padding: 40px 20px 80px;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-form label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: var(--navy);
+  font-size: 14px;
+}
+
+.contact-form input,
+.contact-form textarea {
+  padding: 10px;
+  border: 1px solid var(--border);
+  font-family: inherit;
+  font-size: 14px;
+  margin-bottom: 18px;
+  background-color: var(--bg);
+  color: var(--text);
+}
+
+.contact-form button {
+  align-self: flex-start;
+}
+
+/* ---------------- Footer ---------------- */
+
+.footer {
+  background-color: var(--navy);
+  color: var(--white);
+  padding: 30px 20px;
+  margin-top: 40px;
+}
+
+.footer-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.footer-title {
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.footer-sub {
+  color: var(--border);
+  font-size: 13px;
+  margin: 0 0 12px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: var(--white);
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: var(--light-brown);
+  margin: 0;
+}
+
+/* ---------------- Responsive ---------------- */
+
+@media (max-width: 768px) {
+  .features-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .scores-grid,
+  .keyword-columns,
+  .sections-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .navbar-toggle {
+    display: block;
+  }
+  .navbar-links {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background-color: var(--white);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    flex-direction: column;
+    padding: 10px 20px;
+  }
+  .navbar-links.open {
+    display: flex;
+  }
+  .navbar-inner {
+    position: relative;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-title {
+    font-size: 28px;
+  }
+  .ats-score-number {
+    font-size: 44px;
+  }
+}
