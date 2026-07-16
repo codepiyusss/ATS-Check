@@ -1,89 +1,120 @@
 # Check Your Resume
 
-A small web app that lets you upload (or paste) your resume and get
-back an estimated ATS (Applicant Tracking System) compatibility
-report — score, formatting/grammar/readability checks, keyword
-matching, and improvement suggestions.
+> A simple resume analyzer made using Flask and Python.
 
-This was built as a learning project to practice full-stack
-development with Flask.
+I started building this project after seeing people talk about ATS (Applicant Tracking System) scores while applying for internships. I was curious about how resumes are checked before they reach recruiters, so I decided to build a small web application that could analyze resumes and point out possible improvements.
 
-## Features
+The idea isn't to create a perfect ATS engine. Instead, I wanted to learn how file uploads, PDF parsing, AI APIs, and backend development work together in one project.
 
-- Upload a PDF resume or paste resume text directly
-- Extracts text from PDFs with `pdfplumber`
-- Generates an ATS score, formatting/grammar/readability scores,
-  keyword match %, and suggestions
-- Uses the Gemini API for AI-based analysis if a key is provided,
-  otherwise falls back to a built-in rule-based analyzer
-- Uploaded files are deleted immediately after processing — nothing
-  is stored permanently
+**Current Status:** 🚧 Still under development.
 
-## Project Structure
+---
+
+## What it does
+
+Currently, the application can:
+
+- Upload a resume in PDF format
+- Extract the resume text
+- Estimate an ATS score
+- Check formatting and readability
+- Find missing keywords
+- Suggest improvements using AI
+- Remove uploaded files after analysis
+
+The report is meant to give users an idea of what they can improve before applying for internships or jobs.
+
+---
+
+## Why Flask?
+
+I chose Flask because I wanted to understand how a backend works instead of relying on full-stack frameworks. This project helped me learn routing, templates, file handling, environment variables, and API integration from scratch.
+
+---
+
+## Project Folder
 
 ```
-resume-ats-checker/
-├── app.py                 # App entry point
-├── config.py               # Configuration (upload limits, secret key, etc.)
-├── requirements.txt
-├── .env.example
+resume-ats-checker
+│
 ├── routes/
-│   └── main_routes.py       # All page routes (home, about, contact, analyze, result)
-├── utils/
-│   ├── pdf_parser.py         # PDF validation + text extraction
-│   ├── ai_analysis.py        # Gemini API call + fallback heuristic analyzer
-│   └── helpers.py            # Small shared helper functions
-├── templates/                # Jinja2 HTML templates
 ├── static/
-│   ├── css/style.css
+│   ├── css/
 │   └── js/
-└── uploads/                  # Temporary storage, auto-cleared
+├── templates/
+├── uploads/
+├── utils/
+├── app.py
+├── config.py
+└── requirements.txt
 ```
 
-## Setup
+I tried to keep the folder structure simple so it's easy to understand and maintain.
 
-1. Create and activate a virtual environment:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate   # on Windows: venv\Scripts\activate
-   ```
+---
 
-2. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+## Things I Learned
 
-3. Copy `.env.example` to `.env` and fill in your values:
-   ```bash
-   cp .env.example .env
-   ```
-   - `SECRET_KEY` — any random string, used by Flask sessions
-   - `GEMINI_API_KEY` — optional. Leave blank to use the built-in
-     fallback analyzer instead of calling the Gemini API.
+Working on this project taught me a lot of things that I hadn't used together before.
 
-4. Run the app:
-   ```bash
-   python app.py
-   ```
+- Working with Flask
+- Uploading and validating files
+- Reading text from PDF documents
+- Using the Gemini API
+- Organizing a Python project
+- Writing cleaner HTML templates
+- Basic security practices for file uploads
 
-5. Open `http://127.0.0.1:5000` in your browser.
+I also realized that extracting text from resumes isn't always straightforward because every resume has a different layout.
 
-## Security Notes
+---
 
-- Only `.pdf` files are accepted, and files are checked for the real
-  PDF header (`%PDF-`), not just the file extension.
-- Uploads are capped at 5 MB (`MAX_CONTENT_LENGTH` in `config.py`).
-- Uploaded files are saved with a random filename in `uploads/` and
-  deleted immediately after analysis (success or failure).
-- Basic rate limiting is applied to the `/analyze` route.
-- API keys and the Flask secret key are loaded from environment
-  variables, never hardcoded.
-- Errors are caught and shown as a friendly message — no stack traces
-  or internal details are exposed to the user.
+## Running the Project
 
-## Notes
+Clone the repository
 
-This is a portfolio/learning project, not a production-grade SaaS
-tool — the fallback analyzer especially is a simple heuristic, not a
-real ATS engine. It's meant to demonstrate a complete, working
-full-stack app end to end.
+```bash
+git clone https://github.com/codepiyusss/ATS-Check.git
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Create a `.env` file and add your Gemini API key.
+
+Start the server
+
+```bash
+python app.py
+```
+
+Open
+
+```
+http://127.0.0.1:5000
+```
+
+---
+
+## Future Plans
+
+There are still many things I want to improve.
+
+- Resume vs Job Description matching
+- Better ATS scoring logic
+- DOCX support
+- Downloadable report
+- More accurate keyword detection
+- Better mobile experience
+- Improve UI while keeping it simple
+
+---
+
+## A Small Note
+
+This project was built mainly for learning and practice. The ATS score generated here is only an estimate and shouldn't be treated as an official recruiter score. My goal was to understand how these systems work and build something useful while improving my backend development skills.
+
+If you have any suggestions or find any issues, feel free to open one. I'm still learning, and every bit of feedback helps.
