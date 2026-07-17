@@ -5,3 +5,4 @@ venv/
 env/
 uploads/*.pdf
 .DS_Store
+.env.example
