@@ -1,9 +1,3 @@
-/* =========================================================
-   CHECK YOUR RESUME - main stylesheet
-   Keeping this simple and readable on purpose - no CSS
-   framework, just plain flat styles.
-   ========================================================= */
-
 :root {
   --bg: #F6F2EF;
   --navy: #202940;
@@ -49,8 +43,6 @@ h1, h2, h3 {
   color: var(--navy);
   font-weight: 700;
 }
-
-/* ---------------- Navbar ---------------- */
 
 .navbar {
   background-color: var(--white);
@@ -98,8 +90,6 @@ h1, h2, h3 {
   cursor: pointer;
 }
 
-/* ---------------- Flash messages ---------------- */
-
 .flash-container {
   max-width: 1000px;
   margin: 16px auto 0;
@@ -123,7 +113,6 @@ h1, h2, h3 {
   color: var(--good);
 }
 
-/* ---------------- Hero ---------------- */
 
 .hero {
   text-align: center;
@@ -142,7 +131,6 @@ h1, h2, h3 {
   font-size: 16px;
 }
 
-/* ---------------- Upload section ---------------- */
 
 .upload-section {
   padding: 20px 20px 60px;
@@ -241,8 +229,6 @@ h1, h2, h3 {
   margin-top: 26px;
 }
 
-/* ---------------- Buttons ---------------- */
-
 .btn {
   display: inline-block;
   padding: 12px 24px;
@@ -273,8 +259,6 @@ h1, h2, h3 {
   padding: 14px 36px;
   font-size: 16px;
 }
-
-/* ---------------- Features ---------------- */
 
 .features-section {
   padding: 40px 20px 60px;
@@ -314,8 +298,6 @@ h1, h2, h3 {
   font-size: 14px;
 }
 
-/* ---------------- Privacy notice ---------------- */
-
 .privacy-section {
   padding: 0 20px 60px;
 }
@@ -335,7 +317,6 @@ h1, h2, h3 {
   color: var(--brown);
 }
 
-/* ---------------- Result page ---------------- */
 
 .result-section {
   padding: 40px 20px 80px;
@@ -501,8 +482,6 @@ h1, h2, h3 {
   margin-top: 10px;
 }
 
-/* ---------------- Static pages (About/Contact) ---------------- */
-
 .static-page {
   padding: 40px 20px 80px;
 }
@@ -534,7 +513,6 @@ h1, h2, h3 {
   align-self: flex-start;
 }
 
-/* ---------------- Footer ---------------- */
 
 .footer {
   background-color: var(--navy);
@@ -579,7 +557,6 @@ h1, h2, h3 {
   margin: 0;
 }
 
-/* ---------------- Responsive ---------------- */
 
 @media (max-width: 768px) {
   .features-grid {
