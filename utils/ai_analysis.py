@@ -1,13 +1,3 @@
-"""
-This file is responsible for analyzing resume text and producing the
-report shown on the results page (ATS score, keyword match, etc).
-
-If a GEMINI_API_KEY is configured, we ask Gemini to do the analysis
-and return structured JSON. If no key is set, we fall back to a
-simple rule-based analyzer built with plain Python so the whole
-project still runs and can be demoed without needing an API key.
-"""
-
 import json
 import re
 
@@ -29,12 +19,6 @@ ACTION_VERBS = [
 
 
 def analyze_resume(resume_text, api_key=None):
-    """
-    Main entry point used by the routes. Tries the Gemini API first
-    (if a key is configured), and falls back to the local heuristic
-    analyzer if that fails for any reason (missing key, network error,
-    bad response, etc.) so the user always gets a result.
-    """
     if api_key:
         try:
             return _analyze_with_gemini(resume_text, api_key)
@@ -47,10 +31,6 @@ def analyze_resume(resume_text, api_key=None):
 
 
 def _analyze_with_gemini(resume_text, api_key):
-    """
-    Calls the Gemini API and asks it to return a JSON report.
-    Requires the 'google-generativeai' package (see requirements.txt).
-    """
     import google.generativeai as genai
 
     genai.configure(api_key=api_key)
@@ -90,12 +70,6 @@ Resume text:
 
 
 def _analyze_with_heuristics(resume_text):
-    """
-    A simple, transparent, rule-based analyzer used when no AI API key
-    is configured. It's not as smart as a real LLM, but it produces a
-    reasonable, consistent report so the app is fully functional on
-    its own.
-    """
     text_lower = resume_text.lower()
     word_count = len(resume_text.split())
 
@@ -196,11 +170,6 @@ def _analyze_with_heuristics(resume_text):
 
 
 def _normalize_result(data):
-    """
-    Make sure every expected key exists and scores are valid integers
-    0-100, regardless of whether the data came from Gemini or the
-    fallback analyzer. This protects the templates from KeyErrors.
-    """
     def clamp_score(value):
         try:
             return max(0, min(100, int(value)))
