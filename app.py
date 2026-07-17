@@ -1,12 +1,3 @@
-"""
-CHECK YOUR RESUME
-Main Flask application file.
-
-This is the entry point of the app. It creates the Flask app,
-loads configuration, registers the routes (blueprint), and makes
-sure the upload folder exists before the server starts.
-"""
-
 import os
 from flask import Flask
 from dotenv import load_dotenv
@@ -19,7 +10,6 @@ load_dotenv()
 
 
 def create_app():
-    """Application factory - builds and configures the Flask app."""
     app = Flask(__name__)
     app.config.from_object(Config)
 
