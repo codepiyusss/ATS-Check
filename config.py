@@ -1,11 +1,3 @@
-"""
-Basic configuration for the app.
-
-Keeping this in its own file (instead of hardcoding values inside
-app.py) makes it easier to change settings later and keeps secrets
-out of the codebase by pulling them from environment variables.
-"""
-
 import os
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
