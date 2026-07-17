@@ -1,9 +1,3 @@
-"""
-All the page routes for the app live here in one blueprint, since this
-is a small project and splitting routes across many blueprints would
-be overkill.
-"""
-
 import os
 import time
 from collections import defaultdict
