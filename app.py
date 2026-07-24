@@ -9,7 +9,6 @@ from routes.main_routes import main_bp
 load_dotenv()
 
 
-def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
