@@ -8,7 +8,7 @@ from routes.main_routes import main_bp
 # Load variables from .env file (API keys, secret key, etc.)
 load_dotenv()
 
-
+def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
