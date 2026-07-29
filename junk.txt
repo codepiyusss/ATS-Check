@@ -14,3 +14,11 @@ rows = 5
 for i in range(1, rows + 1):
     # Print '*' multiplied by the row number
     print("* " * i)
+
+# Number of rows
+rows = 5
+
+# Loop through each row
+for i in range(1, rows + 1):
+    # Print '*' multiplied by the row number
+    print("* " * i)
