@@ -1,9 +1,6 @@
 import json
 import re
 
-# A small, common set of technical/professional keywords used by the
-# fallback analyzer to estimate keyword match. A real project could
-# expand this list per job role.
 COMMON_KEYWORDS = [
     "python", "java", "javascript", "sql", "html", "css", "git",
     "docker", "kubernetes", "aws", "rest api", "machine learning",
@@ -23,8 +20,6 @@ def analyze_resume(resume_text, api_key=None):
         try:
             return _analyze_with_gemini(resume_text, api_key)
         except Exception as exc:
-            # Don't crash the request just because the AI call failed -
-            # fall back to the local analyzer and note it in the logs.
             print(f"[ai_analysis] Gemini call failed, using fallback: {exc}")
 
     return _analyze_with_heuristics(resume_text)
@@ -61,8 +56,6 @@ Resume text:
 
     response = model.generate_content(prompt)
     raw_text = response.text.strip()
-
-    # Strip markdown code fences if the model adds them anyway
     raw_text = re.sub(r"^```(json)?|```$", "", raw_text.strip(), flags=re.MULTILINE).strip()
 
     data = json.loads(raw_text)
@@ -73,12 +66,10 @@ def _analyze_with_heuristics(resume_text):
     text_lower = resume_text.lower()
     word_count = len(resume_text.split())
 
-    # --- Keyword matching ---
     matched = [kw for kw in COMMON_KEYWORDS if kw in text_lower]
     missing = [kw for kw in COMMON_KEYWORDS if kw not in text_lower][:8]
     keyword_match_percent = round((len(matched) / len(COMMON_KEYWORDS)) * 100)
 
-    # --- Formatting score (very rough heuristic) ---
     has_bullets = bool(re.search(r"(^|\n)\s*[•\-\*]", resume_text))
     has_email = bool(re.search(r"[\w.+-]+@[\w-]+\.[\w.-]+", resume_text))
     has_phone = bool(re.search(r"(\+?\d[\d\-\s]{8,}\d)", resume_text))
@@ -94,18 +85,13 @@ def _analyze_with_heuristics(resume_text):
     formatting_score += min(section_headers * 5, 20)
     formatting_score = min(formatting_score, 100)
 
-    # --- Grammar score (rough proxy: sentence length + repeated words) ---
     sentences = re.split(r"[.!?]\s+", resume_text)
     avg_sentence_len = word_count / max(len(sentences), 1)
     grammar_score = 90 if 5 <= avg_sentence_len <= 25 else 65
 
-    # --- Readability score (based on word/section balance) ---
     readability_score = 85 if 200 <= word_count <= 900 else 60
 
-    # --- Action verbs used ---
     verbs_used = [v for v in ACTION_VERBS if v in text_lower]
-
-    # --- Overall ATS score: weighted average of the above ---
     ats_score = round(
         keyword_match_percent * 0.35
         + formatting_score * 0.25
