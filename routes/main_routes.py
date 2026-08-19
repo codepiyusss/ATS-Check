@@ -14,9 +14,6 @@ from utils.helpers import allowed_file, generate_temp_filename, sanitize_text, s
 
 main_bp = Blueprint("main", __name__)
 
-# --- very basic in-memory rate limiter ---
-# Not meant for production (won't work across multiple server workers),
-# but stops a single user from spamming the /analyze route.
 _request_log = defaultdict(list)
 RATE_LIMIT_WINDOW = 60  # seconds
 RATE_LIMIT_MAX_REQUESTS = 5
@@ -53,8 +50,6 @@ def contact():
             flash("Please fill in all fields before submitting.", "error")
             return redirect(url_for("main.contact"))
 
-        # In a real project this would send an email or save to a database.
-        # For this student project, we just confirm it was "received".
         print(f"[contact form] {name} <{email}>: {message}")
         flash("Thanks! Your message has been received.", "success")
         return redirect(url_for("main.contact"))
@@ -76,15 +71,12 @@ def analyze():
     temp_path = None
 
     try:
-        # Option 1: a PDF file was uploaded
         if uploaded_file and uploaded_file.filename:
             filename = secure_filename(uploaded_file.filename)
 
             if not allowed_file(filename, current_app.config["ALLOWED_EXTENSIONS"]):
                 flash("Only PDF files are supported.", "error")
                 return redirect(url_for("main.index"))
-
-            # Save with a random name so we never trust the original filename
             temp_filename = generate_temp_filename(filename)
             temp_path = os.path.join(current_app.config["UPLOAD_FOLDER"], temp_filename)
             uploaded_file.save(temp_path)
@@ -94,8 +86,6 @@ def analyze():
             except PDFParsingError as exc:
                 flash(str(exc), "error")
                 return redirect(url_for("main.index"))
-
-        # Option 2: resume text was pasted directly
         elif pasted_text.strip():
             resume_text = pasted_text
 
@@ -109,24 +99,19 @@ def analyze():
             flash("That doesn't look like enough resume content to analyze.", "error")
             return redirect(url_for("main.index"))
 
-        # Run the (AI or fallback) analysis
         api_key = current_app.config.get("GEMINI_API_KEY")
         result = analyze_resume(resume_text, api_key=api_key)
 
-        # Store in the session so the /result page can render it after redirect
         session["analysis_result"] = result
 
         return redirect(url_for("main.result"))
 
     except Exception:
-        # Catch-all so we never leak a stack trace to the user.
         current_app.logger.exception("Unexpected error during resume analysis")
         flash("Something went wrong while analyzing your resume. Please try again.", "error")
         return redirect(url_for("main.index"))
 
     finally:
-        # Always delete the temporary uploaded file, whether analysis
-        # succeeded or failed - we never keep resumes on disk.
         if temp_path and os.path.exists(temp_path):
             try:
                 os.remove(temp_path)
