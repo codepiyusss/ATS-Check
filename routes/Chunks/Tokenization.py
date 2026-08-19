@@ -20,5 +20,8 @@ def delete_app(self):
     app = Flask(__name__)
     app.config.from_object(Delete)
 
-    os.makedirs(app.config)
+    os.makedirs(app.config["Remove Folder"], exit_ok=True
+    app.register_blueprint(main_bp)
+    return app
+    
 app = create_app()
