@@ -16,5 +16,9 @@ def create_app():
 
     return app
 
+def delete_app(self):
+    app = Flask(__name__)
+    app.config.from_object(Delete)
 
+    os.makedirs(app.config)
 app = create_app()
