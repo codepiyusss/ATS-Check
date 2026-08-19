@@ -1,6 +1,3 @@
-// Handles the "Upload Resume" / "Paste Resume Text" tabs and the
-// drag-and-drop upload box on the homepage.
-
 document.addEventListener("DOMContentLoaded", function () {
   const tabButtons = document.querySelectorAll(".tab-btn");
   const tabContents = document.querySelectorAll(".tab-content");
@@ -35,7 +32,6 @@ document.addEventListener("DOMContentLoaded", function () {
     showFileName(fileInput.files[0]);
   });
 
-  // Drag and drop support
   ["dragenter", "dragover"].forEach(function (eventName) {
     dropZone.addEventListener(eventName, function (e) {
       e.preventDefault();
@@ -65,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Basic client-side check before submitting the form
+
   const form = document.getElementById("analyzeForm");
   if (form) {
     form.addEventListener("submit", function (e) {
