@@ -98,19 +98,6 @@ http://127.0.0.1:5000
 
 ---
 
-## Future Plans
-
-There are still many things I want to improve.
-
-- Resume vs Job Description matching
-- Better ATS scoring logic
-- DOCX support
-- Downloadable report
-- More accurate keyword detection
-- Better mobile experience
-- Improve UI while keeping it simple
-
----
 
 ## A Small Note
 
