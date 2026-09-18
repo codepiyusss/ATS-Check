@@ -1,12 +1,11 @@
 # Check Your Resume
 
-> A simple resume analyzer made using Flask and Python.
+> A simple resume analyzer made using Flask library and Python.
 
 I started building this project after seeing people talk about ATS (Applicant Tracking System) scores while applying for internships. I was curious about how resumes are checked before they reach recruiters, so I decided to build a small web application that could analyze resumes and point out possible improvements.
 
 The idea isn't to create a perfect ATS engine. Instead, I wanted to learn how file uploads, PDF parsing, AI APIs, and backend development work together in one project.
 
-**Current Status:** 🚧 Still under development.
 
 ---
 
