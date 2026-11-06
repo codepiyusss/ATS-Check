@@ -1,29 +1,32 @@
 import os
-from flask import Flask
+
 from dotenv import load_dotenv
+from flask import Flask
 
-from config import Config
-from routes.main_routes import main_bp
+load_dotenv()  # must run before config.py reads os.environ
 
-# Load variables from .env file (API keys, secret key, etc.)
-load_dotenv()
+from config import get_config  # noqa: E402
 
-def create_app():
+
+def create_app(config_name=None):
     app = Flask(__name__)
-    app.config.from_object(Config)
+    app.config.from_object(get_config(config_name))
 
-    # Make sure the temporary upload folder exists
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
-    # Register all the routes defined in routes/main_routes.py
+    from routes.main import main_bp
+    from routes.analysis import analysis_bp
+    from routes.errors import register_error_handlers
+
     app.register_blueprint(main_bp)
+    app.register_blueprint(analysis_bp)
+    register_error_handlers(app)
 
     return app
 
 
+# Gunicorn imports this name: `gunicorn app:app`
 app = create_app()
 
-
 if __name__ == "__main__":
-    # debug=True is fine for local development, turn off in production
-    app.run(debug=True, port=5000)
+    app.run(port=5000)

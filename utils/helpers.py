@@ -2,14 +2,6 @@ import re
 import uuid
 
 
-def allowed_file(filename, allowed_extensions):
-    """Check that the uploaded file has an allowed extension (e.g. pdf)."""
-    return (
-        "." in filename
-        and filename.rsplit(".", 1)[1].lower() in allowed_extensions
-    )
-
-
 def generate_temp_filename(original_filename):
     ext = original_filename.rsplit(".", 1)[1].lower()
     return f"{uuid.uuid4().hex}.{ext}"

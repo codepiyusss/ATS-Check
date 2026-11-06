@@ -1,8 +1,20 @@
+# Python
 __pycache__/
 *.pyc
-.env
+.pytest_cache/
 venv/
 env/
-uploads/*.pdf
+.venv/
+
+# Secrets - never commit these
+.env
+serviceAccount*.json
+*-firebase-adminsdk-*.json
+
+# Runtime uploads (resumes are deleted after processing; never commit them)
+uploads/
+
+# OS / editor
 .DS_Store
-.env.example
+.vscode/
+.idea/
