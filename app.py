@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timezone
 
 from dotenv import load_dotenv
 from flask import Flask
@@ -21,6 +22,10 @@ def create_app(config_name=None):
     app.register_blueprint(main_bp)
     app.register_blueprint(analysis_bp)
     register_error_handlers(app)
+
+    @app.context_processor
+    def inject_globals():
+        return {"current_year": datetime.now(timezone.utc).year}
 
     return app
 

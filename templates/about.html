@@ -1,48 +1,19 @@
 {% extends "base.html" %}
-{% block title %}About - Check Your Resume{% endblock %}
-
+{% block title %}About - ATS-Check{% endblock %}
 {% block content %}
-<section class="static-page">
-  <div class="container narrow">
-
-    <h1 class="page-heading">About This Project</h1>
-
-    <div class="box">
-      <h2 class="box-heading">Purpose</h2>
-      <p>
-        Check Your Resume was built to help job seekers get a quick,
-        practical idea of how well their resume might perform against
-        an Applicant Tracking System (ATS) before they submit it to a
-        real job application.
-      </p>
-    </div>
-
-    <div class="box">
-      <h2 class="box-heading">Who It's For</h2>
-      <p>
-        Students, recent graduates, and anyone actively job hunting who
-        wants fast feedback on formatting, keywords, and overall resume
-        quality without needing to hire a professional resume reviewer.
-      </p>
-    </div>
-
-    <div class="box">
-      <h2 class="box-heading">How ATS Works</h2>
-      <p>
-        Most companies use software called an Applicant Tracking System
-        to automatically scan and filter incoming resumes before a human
-        ever sees them. These systems look for relevant keywords, clear
-        formatting, and readable structure. A resume that isn't
-        ATS-friendly can be filtered out even if the candidate is
-        qualified.
-      </p>
-      <p>
-        This project estimates ATS compatibility using resume parsing,
-        keyword analysis, formatting evaluation, and AI-generated
-        feedback. We don't store any data from the user
-      </p>
-    </div>
-
-  </div>
-</section>
+<div class="container narrow">
+  <div class="page-head"><h1>About ATS-Check</h1></div>
+  <section class="card" style="margin-bottom:1.25rem">
+    <h2 style="font-size:1.2rem">Why it exists</h2>
+    <p>ATS-Check began as a student project to understand how resumes are read before a recruiter sees them. The goal is honest, explainable feedback you can act on, not a mystery score.</p>
+  </section>
+  <section class="card" style="margin-bottom:1.25rem">
+    <h2 style="font-size:1.2rem">What an ATS does</h2>
+    <p>Many employers use an applicant tracking system to read, sort and search resumes. Clear structure, readable text and relevant keywords generally help. Every company configures its system differently, so no tool, including this one, can tell you your exact score.</p>
+  </section>
+  <section class="card">
+    <h2 style="font-size:1.2rem">How the estimate works today</h2>
+    <p>Your PDF is converted to text, then checked for common keywords, formatting signals (bullets, contact details, headings) and length. A more detailed, field-specific engine is being built, and this page will explain exactly how it scores when it's ready.</p>
+  </section>
+</div>
 {% endblock %}

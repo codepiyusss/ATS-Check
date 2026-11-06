@@ -8,6 +8,16 @@ COMMON_KEYWORDS = [
     "leadership", "problem solving", "data analysis", "excel",
 ]
 
+DISPLAY_NAMES = {
+    "sql": "SQL", "html": "HTML", "css": "CSS", "aws": "AWS", "git": "Git",
+    "rest api": "REST API", "node.js": "Node.js", "javascript": "JavaScript",
+}
+
+
+def _display(keyword):
+    return DISPLAY_NAMES.get(keyword, keyword.title())
+
+
 ACTION_VERBS = [
     "built", "developed", "designed", "created", "led", "managed",
     "improved", "increased", "reduced", "implemented", "launched",
@@ -144,8 +154,8 @@ def _analyze_with_heuristics(resume_text):
         "grammar_score": grammar_score,
         "readability_score": readability_score,
         "keyword_match_percent": keyword_match_percent,
-        "matched_keywords": [k.title() for k in matched] or ["None detected"],
-        "missing_keywords": [k.title() for k in missing],
+        "matched_keywords": [_display(k) for k in matched] or ["None detected"],
+        "missing_keywords": [_display(k) for k in missing],
         "strong_sections": strong_sections or ["N/A"],
         "weak_sections": weak_sections or ["N/A"],
         "suggestions": suggestions[:6],

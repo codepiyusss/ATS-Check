@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon with context %}
+{% block title %}ATS-Check - Resume compatibility, explained{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <p class="eyebrow">{{ icon('target', 16) }} Free, open source, no sign-up needed</p>
+      <h1>Know how your resume reads to an ATS <span class="hl">before you apply.</span></h1>
+      <p class="lead">Upload your resume, choose your target career field, and get a transparent compatibility estimate: what matched, what is missing, and what to fix first.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary btn-lg" href="{{ url_for('main.analyzer') }}">Analyze my resume {{ icon('arrow') }}</a>
+        <a class="btn btn-secondary btn-lg" href="#how-it-works">How it works</a>
+      </div>
+      <p class="fineprint">Estimates only. No tool can know exactly how a company's own ATS will score you.</p>
+    </div>
+    <aside class="card" aria-labelledby="report-heading">
+      <h2 id="report-heading" style="font-size:1.2rem">What your report includes</h2>
+      <ul class="checklist">
+        <li>{{ icon('check') }}<span>An overall compatibility estimate with a clear label</span></li>
+        <li>{{ icon('check') }}<span>Keywords found in your resume, and ones worth adding</span></li>
+        <li>{{ icon('check') }}<span>Formatting and structure checks</span></li>
+        <li>{{ icon('check') }}<span>Specific strengths, weak spots, and next steps</span></li>
+        <li>{{ icon('check') }}<span>Plain-language reasons, not a mystery number</span></li>
+      </ul>
+    </aside>
+  </div>
+</section>
+
+<section class="section section-alt" id="features" aria-labelledby="features-h">
+  <div class="container">
+    <div class="section-head">
+      <h2 id="features-h">What ATS-Check does</h2>
+      <p class="muted">Each feature is labelled honestly: live today, or coming soon.</p>
+    </div>
+    <div class="grid-3">
+      <article class="card"><div class="feature-icon">{{ icon('file') }}</div>
+        <h3>Resume parsing <span class="badge badge-live">Live</span></h3>
+        <p class="muted">Reads the text from your PDF the way an ATS would, and tells you if it can't be read.</p></article>
+      <article class="card"><div class="feature-icon">{{ icon('chart') }}</div>
+        <h3>Compatibility estimate <span class="badge badge-live">Live</span></h3>
+        <p class="muted">A score built from visible checks: keywords, formatting, structure and length.</p></article>
+      <article class="card"><div class="feature-icon">{{ icon('search') }}</div>
+        <h3>Keyword gaps <span class="badge badge-live">Live</span></h3>
+        <p class="muted">See which common skills your resume shows and which it doesn't.</p></article>
+      <article class="card"><div class="feature-icon">{{ icon('target') }}</div>
+        <h3>Career-field matching <span class="badge">Coming soon</span></h3>
+        <p class="muted">Skills and keywords tailored to the role you're aiming for, such as Data Analyst or Backend Developer.</p></article>
+      <article class="card"><div class="feature-icon">{{ icon('list') }}</div>
+        <h3>Job-description match <span class="badge">Coming soon</span></h3>
+        <p class="muted">Paste a job posting and see how your resume lines up with it.</p></article>
+      <article class="card"><div class="feature-icon">{{ icon('pen') }}</div>
+        <h3>Bullet-point improvements <span class="badge">Coming soon</span></h3>
+        <p class="muted">Stronger wording for weak bullets, without inventing anything you didn't do.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="how-it-works" aria-labelledby="how-h">
+  <div class="container">
+    <div class="section-head"><h2 id="how-h">How it works</h2></div>
+    <ol class="steps">
+      <li><h3>Add your resume</h3><p class="muted">Upload a PDF (up to 5 MB) or paste the text.</p></li>
+      <li><h3>Pick your target</h3><p class="muted">Choose a career field and, optionally, paste a job description.</p></li>
+      <li><h3>Read your report</h3><p class="muted">Get your estimate, what matched, what's missing, and what to fix.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="section section-alt" id="privacy" aria-labelledby="privacy-h">
+  <div class="container narrow">
+    <div class="card privacy-card">
+      <div class="feature-icon">{{ icon('lock') }}</div>
+      <div>
+        <h2 id="privacy-h" style="font-size:1.3rem">Your resume stays yours</h2>
+        <p>Uploaded files are deleted from the server as soon as your resume has been read. We don't keep your resume text. Your results live only in your browser session.</p>
+        {% if config.GEMINI_API_KEY %}
+        <p><strong>Note:</strong> this site has optional AI feedback switched on. When it is, your resume text is sent to Google's Gemini service to produce that feedback.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
