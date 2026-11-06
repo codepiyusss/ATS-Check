@@ -19,7 +19,7 @@
         <button type="button" class="tab-btn" data-tab="paste-tab">Paste Resume Text</button>
       </div>
 
-      <form action="{{ url_for('main.analyze') }}" method="POST" enctype="multipart/form-data" id="analyzeForm">
+      <form action="{{ url_for('analysis.analyze') }}" method="POST" enctype="multipart/form-data" id="analyzeForm">
 
         <div class="tab-content active" id="upload-tab">
           <label for="resume_file" class="upload-box" id="dropZone">

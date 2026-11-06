@@ -1,66 +1,43 @@
 import os
-import time
-from collections import defaultdict
 
 from flask import (
     Blueprint, render_template, request, redirect,
-    url_for, session, current_app, flash
+    url_for, session, current_app, flash,
 )
 from werkzeug.utils import secure_filename
 
 from utils.pdf_parser import extract_text_from_pdf, PDFParsingError
 from utils.ai_analysis import analyze_resume
-from utils.helpers import allowed_file, generate_temp_filename, sanitize_text, sanitize_form_field
+from utils.helpers import generate_temp_filename, sanitize_text
+from utils.security import RateLimiter
+from utils.validators import allowed_file
 
-main_bp = Blueprint("main", __name__)
+analysis_bp = Blueprint("analysis", __name__)
 
-_request_log = defaultdict(list)
-RATE_LIMIT_WINDOW = 60  # seconds
-RATE_LIMIT_MAX_REQUESTS = 5
-
-
-def _is_rate_limited(ip_address):
-    now = time.time()
-    recent = [t for t in _request_log[ip_address] if now - t < RATE_LIMIT_WINDOW]
-    _request_log[ip_address] = recent
-    if len(recent) >= RATE_LIMIT_MAX_REQUESTS:
-        return True
-    _request_log[ip_address].append(now)
-    return False
+# Created once; limits come from config the first time a request needs them.
+_limiter = None
 
 
-@main_bp.route("/")
-def index():
-    return render_template("index.html")
+def get_limiter():
+    global _limiter
+    if _limiter is None:
+        _limiter = RateLimiter(
+            window_seconds=current_app.config["RATE_LIMIT_WINDOW"],
+            max_requests=current_app.config["RATE_LIMIT_MAX_REQUESTS"],
+        )
+    return _limiter
 
 
-@main_bp.route("/about")
-def about():
-    return render_template("about.html")
+def reset_limiter():
+    """Forget all rate-limit state (used by tests)."""
+    global _limiter
+    _limiter = None
 
 
-@main_bp.route("/contact", methods=["GET", "POST"])
-def contact():
-    if request.method == "POST":
-        name = sanitize_form_field(request.form.get("name", ""), max_length=100)
-        email = sanitize_form_field(request.form.get("email", ""), max_length=150)
-        message = sanitize_form_field(request.form.get("message", ""), max_length=2000)
-
-        if not name or not email or not message:
-            flash("Please fill in all fields before submitting.", "error")
-            return redirect(url_for("main.contact"))
-
-        print(f"[contact form] {name} <{email}>: {message}")
-        flash("Thanks! Your message has been received.", "success")
-        return redirect(url_for("main.contact"))
-
-    return render_template("contact.html")
-
-
-@main_bp.route("/analyze", methods=["POST"])
+@analysis_bp.route("/analyze", methods=["POST"])
 def analyze():
     ip_address = request.remote_addr or "unknown"
-    if _is_rate_limited(ip_address):
+    if get_limiter().is_limited(ip_address):
         flash("You're sending requests too quickly. Please wait a minute and try again.", "error")
         return redirect(url_for("main.index"))
 
@@ -77,6 +54,7 @@ def analyze():
             if not allowed_file(filename, current_app.config["ALLOWED_EXTENSIONS"]):
                 flash("Only PDF files are supported.", "error")
                 return redirect(url_for("main.index"))
+
             temp_filename = generate_temp_filename(filename)
             temp_path = os.path.join(current_app.config["UPLOAD_FOLDER"], temp_filename)
             uploaded_file.save(temp_path)
@@ -88,7 +66,6 @@ def analyze():
                 return redirect(url_for("main.index"))
         elif pasted_text.strip():
             resume_text = pasted_text
-
         else:
             flash("Please upload a PDF or paste your resume text.", "error")
             return redirect(url_for("main.index"))
@@ -99,14 +76,12 @@ def analyze():
             flash("That doesn't look like enough resume content to analyze.", "error")
             return redirect(url_for("main.index"))
 
-        api_key = current_app.config.get("GEMINI_API_KEY")
-        result = analyze_resume(resume_text, api_key=api_key)
-
+        result = analyze_resume(resume_text, api_key=current_app.config.get("GEMINI_API_KEY"))
         session["analysis_result"] = result
-
-        return redirect(url_for("main.result"))
+        return redirect(url_for("analysis.result"))
 
     except Exception:
+        # Never log resume text: log the traceback only.
         current_app.logger.exception("Unexpected error during resume analysis")
         flash("Something went wrong while analyzing your resume. Please try again.", "error")
         return redirect(url_for("main.index"))
@@ -119,7 +94,7 @@ def analyze():
                 pass
 
 
-@main_bp.route("/result")
+@analysis_bp.route("/result")
 def result():
     data = session.get("analysis_result")
     if not data:

@@ -8,19 +8,16 @@
     <h1 class="page-heading">Contact</h1>
 
     <div class="box">
-      <form action="{{ url_for('main.contact') }}" method="POST" class="contact-form">
-
-        <label for="name">Name</label>
-        <input type="text" id="name" name="name" maxlength="100" required>
-
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" maxlength="150" required>
-
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="6" maxlength="2000" required></textarea>
-
-        <button type="submit" class="btn btn-primary">Submit</button>
-      </form>
+      <h2 class="box-heading">Found a bug or have an idea?</h2>
+      <p>
+        This is an open-source student project. The best way to reach me is to
+        open an issue on GitHub. I read every one.
+      </p>
+      <p>
+        <a class="btn btn-primary"
+           href="https://github.com/codepiyusss/ATS-Check/issues"
+           target="_blank" rel="noopener noreferrer">Open an issue on GitHub</a>
+      </p>
     </div>
 
   </div>
