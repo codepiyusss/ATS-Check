@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon with context %}
+{% block title %}Analyze your resume - ATS-Check{% endblock %}
+
+{% block content %}
+<div class="container narrow">
+  <div class="page-head">
+    <h1>Analyze your resume</h1>
+    <p class="lead">Three quick steps. Your uploaded file is deleted as soon as it has been read.</p>
+  </div>
+
+  <form action="{{ url_for('analysis.analyze') }}" method="POST" enctype="multipart/form-data" id="analyzeForm" class="card form-card" novalidate>
+
+    <fieldset>
+      <legend><span class="step-num" aria-hidden="true">1</span> Add your resume</legend>
+
+      <div class="tabs" role="tablist" aria-label="How to add your resume">
+        <button type="button" class="tab" role="tab" id="tab-upload" aria-controls="panel-upload" aria-selected="true">Upload PDF</button>
+        <button type="button" class="tab" role="tab" id="tab-paste" aria-controls="panel-paste" aria-selected="false" tabindex="-1">Paste text</button>
+      </div>
+
+      <div role="tabpanel" id="panel-upload" aria-labelledby="tab-upload">
+        <label class="dropzone" id="dropZone" for="resume_file">
+          {{ icon('upload', 36) }}
+          <span class="dropzone-title">Choose a PDF or drop it here</span>
+          <span class="muted">PDF only, up to 5 MB</span>
+          <span class="file-name" id="fileName" aria-live="polite"></span>
+          <input type="file" name="resume_file" id="resume_file" class="sr-only" accept="application/pdf,.pdf" aria-describedby="resume-error">
+        </label>
+      </div>
+
+      <div role="tabpanel" id="panel-paste" aria-labelledby="tab-paste" hidden>
+        <label for="resume_text">Resume text</label>
+        <textarea name="resume_text" id="resume_text" rows="10" aria-describedby="resume-error" placeholder="Paste your full resume text here"></textarea>
+      </div>
+
+      <p class="field-error" id="resume-error" role="alert">{{ icon('alert', 18) }}<span></span></p>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-num" aria-hidden="true">2</span> Choose your career field</legend>
+      <div class="field">
+        <label for="career_field">Target role</label>
+        <select name="career_field" id="career_field" required aria-describedby="field-hint">
+          {% for value, label in career_fields %}
+          <option value="{{ value }}">{{ label }}</option>
+          {% endfor %}
+        </select>
+        <p class="hint" id="field-hint">Field-specific scoring is coming soon. For now every field uses the same general keyword check, and your choice is shown on your report.</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend><span class="step-num" aria-hidden="true">3</span> Job description <span class="opt">(optional)</span></legend>
+      <div class="field">
+        <label for="job_description">Paste the job posting</label>
+        <textarea name="job_description" id="job_description" rows="6" maxlength="8000" aria-describedby="jd-hint"></textarea>
+        <p class="hint" id="jd-hint"><span id="jdCount">0</span> / 8000 characters. Job-description matching is coming soon. For now it is only noted on your report and is not used in the score.</p>
+      </div>
+    </fieldset>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
+        <span class="spinner" aria-hidden="true"></span><span id="submitLabel">Analyze resume</span>
+      </button>
+      <p class="muted" id="processing" role="status" style="margin:0"></p>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}<script src="{{ url_for('static', filename='js/analyzer.js') }}"></script>{% endblock %}

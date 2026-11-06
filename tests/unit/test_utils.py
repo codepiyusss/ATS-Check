@@ -47,3 +47,12 @@ def test_rate_limiter_window_expires():
     assert rl.is_limited("ip") is True
     time.sleep(0.15)
     assert rl.is_limited("ip") is False
+
+
+def test_keyword_display_names_are_properly_cased():
+    from utils.ai_analysis import _analyze_with_heuristics
+    text = "Built and developed sql and html and css apps on aws with node.js and a rest api. " * 3
+    shown = _analyze_with_heuristics(text)["matched_keywords"]
+    for expected in ("SQL", "HTML", "CSS", "AWS", "Node.js", "REST API"):
+        assert expected in shown
+    assert "Sql" not in shown and "Aws" not in shown

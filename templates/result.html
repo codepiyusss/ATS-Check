@@ -1,129 +1,98 @@
 {% extends "base.html" %}
-{% block title %}Resume Analysis Report{% endblock %}
+{% from "_icons.html" import icon with context %}
+{% block title %}Your report - ATS-Check{% endblock %}
+
+{% macro meter(id, label, value, help) %}
+<div class="meter">
+  <div class="meter-head"><span id="{{ id }}">{{ label }}</span><span>{{ value }}%</span></div>
+  <div class="meter-track" role="progressbar" aria-labelledby="{{ id }}" aria-valuenow="{{ value }}" aria-valuemin="0" aria-valuemax="100">
+    <div class="meter-fill" style="width: {{ value }}%"></div>
+  </div>
+  <p class="hint">{{ help }}</p>
+</div>
+{% endmacro %}
 
 {% block content %}
-<section class="result-section">
-  <div class="container">
+{% set score = data.ats_score %}
+{% set band = 'Good' if score >= 75 else ('Average' if score >= 50 else 'Needs improvement') %}
+{% set band_cls = 'good' if score >= 75 else ('average' if score >= 50 else 'low') %}
+{% set none_matched = data.matched_keywords == ['None detected'] %}
+{% set strong = data.strong_sections if data.strong_sections != ['N/A'] else [] %}
+{% set weak = data.weak_sections if data.weak_sections != ['N/A'] else [] %}
 
-    <h1 class="page-heading">Resume Analysis Report</h1>
+<div class="container">
+  <div class="page-head">
+    <h1>Your resume report</h1>
+    <p class="muted">Target field: <strong>{{ data.career_field_label or 'General / not sure' }}</strong>
+      {% if data.jd_words %} &middot; Job description added ({{ data.jd_words }} words){% endif %}</p>
+  </div>
 
-    <!-- ATS Score -->
-    <div class="ats-score-box box">
-      <p class="ats-score-number">{{ data.ats_score }}%</p>
-      {% set label = "Good" if data.ats_score >= 75 else ("Average" if data.ats_score >= 50 else "Needs Improvement") %}
-      {% set label_class = "good" if data.ats_score >= 75 else ("average" if data.ats_score >= 50 else "needs-improvement") %}
-      <p class="ats-score-label label-{{ label_class }}">{{ label }}</p>
-      <p class="ats-score-caption">Estimated ATS Compatibility Score</p>
+  <div class="notice" role="note">{{ icon('info') }}
+    <p>This is a <strong>compatibility estimate</strong>, not a prediction of any company's ATS. {% if data.career_field_label and data.career_field_label != 'General / not sure' or data.jd_words %}Field-specific and job-description scoring are coming soon, so this score uses a general keyword list for every field.{% else %}The score uses a general keyword list.{% endif %}</p>
+  </div>
+
+  <section class="card score-hero" aria-labelledby="score-h">
+    <div class="ring" role="img" aria-label="Estimated compatibility {{ score }} out of 100, rated {{ band }}">
+      <svg width="168" height="168" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+        <circle class="ring-track" cx="60" cy="60" r="54" fill="none" stroke-width="10"/>
+        <circle class="ring-fill" cx="60" cy="60" r="54" fill="none" stroke-width="10" stroke-dasharray="{{ (score / 100 * 339.29)|round(1) }} 339.29"/>
+      </svg>
+      <div class="ring-label"><span class="ring-num">{{ score }}</span><span class="muted">out of 100</span></div>
     </div>
-
-    <!-- Score bars -->
-    <div class="scores-grid">
-
-      <div class="score-box box">
-        <div class="score-header">
-          <span>Formatting Score</span>
-          <span>{{ data.formatting_score }}%</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width: {{ data.formatting_score }}%;"></div>
-        </div>
-      </div>
-
-      <div class="score-box box">
-        <div class="score-header">
-          <span>Grammar Score</span>
-          <span>{{ data.grammar_score }}%</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width: {{ data.grammar_score }}%;"></div>
-        </div>
-      </div>
-
-      <div class="score-box box">
-        <div class="score-header">
-          <span>Readability Score</span>
-          <span>{{ data.readability_score }}%</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width: {{ data.readability_score }}%;"></div>
-        </div>
-      </div>
-
-      <div class="score-box box">
-        <div class="score-header">
-          <span>Keyword Match</span>
-          <span>{{ data.keyword_match_percent }}%</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width: {{ data.keyword_match_percent }}%;"></div>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- Keyword match columns -->
-    <div class="box keyword-box">
-      <h2 class="box-heading">Keyword Match</h2>
-      <div class="keyword-columns">
-        <div class="keyword-col">
-          <h3>Matched Keywords</h3>
-          <ul class="keyword-list matched">
-            {% for kw in data.matched_keywords %}
-              <li>{{ kw }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-        <div class="keyword-col">
-          <h3>Missing Keywords</h3>
-          <ul class="keyword-list missing">
-            {% for kw in data.missing_keywords %}
-              <li>{{ kw }}</li>
-            {% endfor %}
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <!-- Strong / Weak sections -->
-    <div class="sections-grid">
-      <div class="box">
-        <h2 class="box-heading">Strong Sections</h2>
-        <ul class="plain-list">
-          {% for s in data.strong_sections %}
-            <li>{{ s }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="box">
-        <h2 class="box-heading">Weak Sections</h2>
-        <ul class="plain-list">
-          {% for s in data.weak_sections %}
-            <li>{{ s }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    </div>
-
-    <!-- Suggestions -->
-    <div class="box suggestions-box">
-      <h2 class="box-heading">Suggestions</h2>
-      <ul class="suggestions-list">
-        {% for suggestion in data.suggestions %}
-          <li><span class="check-icon">✔</span> {{ suggestion }}</li>
-        {% endfor %}
-      </ul>
-    </div>
-
-    <!-- Overall feedback -->
-    <div class="box feedback-box">
-      <h2 class="box-heading">Overall Feedback</h2>
+    <div>
+      <h2 id="score-h" style="font-size:1.3rem">Estimated ATS compatibility</h2>
+      <p class="band band-{{ band_cls }}">{{ icon('check' if band_cls == 'good' else ('alert' if band_cls == 'average' else 'x')) }} {{ band }}</p>
       <p>{{ data.overall_feedback }}</p>
     </div>
+  </section>
 
-    <div class="result-actions">
-      <a href="{{ url_for('main.index') }}" class="btn btn-secondary">Analyze Another Resume</a>
-    </div>
+  <div class="grid-2">
+    <section class="card" aria-labelledby="break-h">
+      <h2 id="break-h" style="font-size:1.2rem">Score breakdown</h2>
+      {{ meter('m-fmt', 'Formatting', data.formatting_score, 'Bullets, contact details and section headings.') }}
+      {{ meter('m-kw', 'Keyword match', data.keyword_match_percent, 'Share of a general keyword list found in your resume.') }}
+      {{ meter('m-sent', 'Sentence length', data.grammar_score, 'Based on average sentence length only. This is not a grammar check.') }}
+      {{ meter('m-len', 'Length', data.readability_score, 'Whether your resume is in a typical word-count range.') }}
+    </section>
 
+    <section class="card" aria-labelledby="kw-h">
+      <h2 id="kw-h" style="font-size:1.2rem">Keywords</h2>
+      <h3>Found in your resume</h3>
+      {% if none_matched %}
+        <p class="muted">No keywords from the general list were found.</p>
+      {% else %}
+        <ul class="pills">{% for kw in data.matched_keywords %}<li class="pill pill-yes">{{ icon('check', 16) }}<span class="sr-only">Found:</span> {{ kw }}</li>{% endfor %}</ul>
+      {% endif %}
+      <h3 style="margin-top:1.25rem">Worth considering</h3>
+      {% if data.missing_keywords %}
+        <ul class="pills">{% for kw in data.missing_keywords %}<li class="pill pill-no">{{ icon('x', 16) }}<span class="sr-only">Missing:</span> {{ kw }}</li>{% endfor %}</ul>
+        <p class="hint">Only add a skill if you really have it.</p>
+      {% else %}
+        <p class="muted">Nothing missing from the general list.</p>
+      {% endif %}
+    </section>
   </div>
-</section>
+
+  <div class="grid-2">
+    <section class="card" aria-labelledby="str-h">
+      <h2 id="str-h" style="font-size:1.2rem">Strengths</h2>
+      {% if strong %}<ul class="iconlist li-good">{% for s in strong %}<li>{{ icon('check') }}<span>{{ s }}</span></li>{% endfor %}</ul>
+      {% else %}<p class="muted">No clear strengths were detected yet.</p>{% endif %}
+    </section>
+    <section class="card" aria-labelledby="weak-h">
+      <h2 id="weak-h" style="font-size:1.2rem">Needs attention</h2>
+      {% if weak %}<ul class="iconlist li-warn">{% for s in weak %}<li>{{ icon('alert') }}<span>{{ s }}</span></li>{% endfor %}</ul>
+      {% else %}<p class="muted">Nothing flagged.</p>{% endif %}
+    </section>
+  </div>
+
+  <section class="card" aria-labelledby="sug-h">
+    <h2 id="sug-h" style="font-size:1.2rem">Suggested next steps</h2>
+    <ul class="iconlist li-tip">{% for s in data.suggestions %}<li>{{ icon('bulb') }}<span>{{ s }}</span></li>{% endfor %}</ul>
+  </section>
+
+  <div class="result-actions">
+    <a class="btn btn-primary" href="{{ url_for('main.analyzer') }}">Analyze another resume</a>
+  </div>
+</div>
 {% endblock %}

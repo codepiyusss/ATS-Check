@@ -22,7 +22,7 @@ def _post_pdf(client, data, filename="resume.pdf"):
 # ---------- simple pages ----------
 
 def test_public_pages_load(client):
-    for url in ("/", "/about", "/contact"):
+    for url in ("/", "/analyzer", "/about", "/contact"):
         assert client.get(url).status_code == 200
 
 
@@ -51,7 +51,7 @@ def test_contact_page_links_to_github_issues(client):
 
 def test_analyze_with_nothing_submitted(client):
     r = client.post("/analyze", data={})
-    assert r.status_code == 302 and r.headers["Location"].endswith("/")
+    assert r.status_code == 302 and r.headers["Location"].endswith("/analyzer")
     assert any("upload a PDF or paste" in m for m in _flashes(client))
 
 
@@ -92,7 +92,7 @@ def test_valid_pdf_full_flow(client, upload_dir):
     assert r.status_code == 302 and r.headers["Location"].endswith("/result")
     page = client.get("/result")
     assert page.status_code == 200
-    assert b"Estimated ATS Compatibility Score" in page.data
+    assert b"Estimated ATS compatibility" in page.data
     assert os.listdir(upload_dir) == [], "uploaded resume must be deleted after processing"
 
 

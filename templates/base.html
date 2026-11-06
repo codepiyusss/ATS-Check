@@ -1,52 +1,57 @@
+{% from "_icons.html" import icon with context %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}Check Your Resume{% endblock %}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}ATS-Check{% endblock %}</title>
+  <meta name="description" content="Check how your resume reads to applicant tracking systems. Transparent, explainable estimates, free and open source.">
+  <script>
+    try { var t = localStorage.getItem("theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}
+  </script>
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to main content</a>
 
-  <header class="navbar">
-    <div class="navbar-inner">
-      <a href="{{ url_for('main.index') }}" class="navbar-brand">CHECK YOUR RESUME</a>
-
-      <button class="navbar-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
-
-      <nav class="navbar-links" id="navLinks">
-        <a href="{{ url_for('main.index') }}">Home</a>
-        <a href="{{ url_for('main.about') }}">About</a>
-        <a href="{{ url_for('main.contact') }}">Contact</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="{{ url_for('main.index') }}">
+        <span class="brand-mark">{{ icon('check', 18) }}</span> ATS-Check
+      </a>
+      <button type="button" class="icon-btn nav-toggle" id="navToggle" aria-expanded="false" aria-controls="siteNav" aria-label="Menu">{{ icon('menu') }}</button>
+      <nav class="nav" id="siteNav" aria-label="Main">
+        <a href="{{ url_for('main.index') }}" {% if request.endpoint == 'main.index' %}aria-current="page"{% endif %}>Home</a>
+        <a href="{{ url_for('main.analyzer') }}" {% if request.endpoint == 'main.analyzer' %}aria-current="page"{% endif %}>Analyzer</a>
+        <a href="{{ url_for('main.about') }}" {% if request.endpoint == 'main.about' %}aria-current="page"{% endif %}>About</a>
+        <a href="{{ url_for('main.contact') }}" {% if request.endpoint == 'main.contact' %}aria-current="page"{% endif %}>Contact</a>
       </nav>
+      <button type="button" class="icon-btn theme-btn" id="themeToggle" aria-label="Switch to light theme">
+        <span class="theme-moon">{{ icon('moon') }}</span><span class="theme-sun">{{ icon('sun') }}</span>
+      </button>
     </div>
   </header>
 
   {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-      <div class="flash-container">
+      <div class="container flash-container">
         {% for category, message in messages %}
-          <div class="flash flash-{{ category }}">{{ message }}</div>
+          <div class="flash flash-{{ category }}" role="{{ 'alert' if category == 'error' else 'status' }}">
+            {{ icon('alert' if category == 'error' else 'check') }}<span>{{ message }}</span>
+          </div>
         {% endfor %}
       </div>
     {% endif %}
   {% endwith %}
 
-  <main>
+  <main id="main" tabindex="-1">
     {% block content %}{% endblock %}
   </main>
 
-  <footer class="footer">
-    <div class="footer-inner">
-      <p class="footer-title">CHECK YOUR RESUME</p>
-      <p class="footer-sub">Made as a student learning project.</p>
-      <div class="footer-links">
-        <a href="https://github.com" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener">LinkedIn</a>
-      </div>
-      <p class="footer-copy">&copy; {{ 2026 }} Check Your Resume. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p style="margin:0">&copy; {{ current_year }} ATS-Check. An open-source student project.</p>
+      <p style="margin:0">Scores are estimates, not guarantees. <a href="https://github.com/codepiyusss/ATS-Check" target="_blank" rel="noopener noreferrer">View on GitHub</a></p>
     </div>
   </footer>
 

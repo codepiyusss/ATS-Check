@@ -1,11 +1,18 @@
 from flask import Blueprint, jsonify, render_template
 
+from services.career_fields import CAREER_FIELDS
+
 main_bp = Blueprint("main", __name__)
 
 
 @main_bp.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("landing.html")
+
+
+@main_bp.route("/analyzer")
+def analyzer():
+    return render_template("analyzer.html", career_fields=CAREER_FIELDS)
 
 
 @main_bp.route("/about")
