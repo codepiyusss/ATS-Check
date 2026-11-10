@@ -128,3 +128,23 @@ def test_rate_limit_kicks_in_after_five_requests(client):
         client.post("/analyze", data={})
     client.post("/analyze", data={})
     assert any("too quickly" in m for m in _flashes(client))
+
+
+def test_behind_proxy_each_visitor_gets_own_rate_limit(app, client):
+    """Without this, every visitor on Render shares ONE bucket (the proxy's IP)."""
+    app.config["TRUST_PROXY"] = True
+    for _ in range(5):
+        client.post("/analyze", data={}, headers={"True-Client-IP": "198.51.100.1"})
+    client.post("/analyze", data={}, headers={"True-Client-IP": "198.51.100.1"})
+    assert any("too quickly" in m for m in _flashes(client))  # visitor A is limited
+    with client.session_transaction() as s:
+        s.pop("_flashes", None)
+    client.post("/analyze", data={}, headers={"True-Client-IP": "198.51.100.2"})
+    assert not any("too quickly" in m for m in _flashes(client))  # visitor B is not
+
+
+def test_forged_header_cannot_bypass_limit_when_proxy_not_trusted(app, client):
+    assert app.config["TRUST_PROXY"] is False
+    for i in range(6):
+        client.post("/analyze", data={}, headers={"True-Client-IP": f"198.51.100.{i}"})
+    assert any("too quickly" in m for m in _flashes(client))
