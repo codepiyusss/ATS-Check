@@ -10,7 +10,7 @@ from utils.pdf_parser import extract_text_from_pdf, PDFParsingError
 from utils.ai_analysis import analyze_resume
 from services.career_fields import is_valid_field, field_label
 from utils.helpers import generate_temp_filename, sanitize_text
-from utils.security import RateLimiter
+from utils.security import RateLimiter, get_client_ip
 from utils.validators import allowed_file
 
 analysis_bp = Blueprint("analysis", __name__)
@@ -39,7 +39,7 @@ def reset_limiter():
 
 @analysis_bp.route("/analyze", methods=["POST"])
 def analyze():
-    ip_address = request.remote_addr or "unknown"
+    ip_address = get_client_ip(request, current_app.config["TRUST_PROXY"])
     if get_limiter().is_limited(ip_address):
         flash("You're sending requests too quickly. Please wait a minute and try again.", "error")
         return redirect(url_for("main.analyzer"))

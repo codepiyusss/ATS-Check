@@ -24,6 +24,9 @@ class Config:
     SESSION_COOKIE_SAMESITE = "Lax"
     SESSION_COOKIE_SECURE = False
 
+    # Set TRUST_PROXY=1 ONLY when deployed behind Render (see docs/DEPLOYMENT.md).
+    TRUST_PROXY = os.environ.get("TRUST_PROXY") == "1"
+
     RATE_LIMIT_WINDOW = 60  # seconds
     RATE_LIMIT_MAX_REQUESTS = 5
 
@@ -51,6 +54,7 @@ class TestingConfig(Config):
     TESTING = True
     SECRET_KEY = "test-secret-key"
     GEMINI_API_KEY = None  # tests must never call an external service
+    TRUST_PROXY = False
     UPLOAD_FOLDER = os.path.join(tempfile.gettempdir(), "ats_check_test_uploads")
 
 

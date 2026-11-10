@@ -1,0 +1,22 @@
+# Render Blueprint for ATS-Check (free tier). See docs/DEPLOYMENT.md.
+services:
+  - type: web
+    name: ats-check
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    # One worker + several threads: keeps memory low (512 MB free tier)
+    # and keeps the in-memory rate limiter consistent.
+    startCommand: gunicorn app:app --workers 1 --threads 4 --timeout 60 --bind 0.0.0.0:$PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: APP_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true
+      - key: TRUST_PROXY
+        value: "1"
+      - key: UPLOAD_FOLDER
+        value: /tmp/ats-uploads
